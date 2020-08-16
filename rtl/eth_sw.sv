@@ -3,7 +3,7 @@
 //
 // Name: eth_sw
 // Description:
-// 2x2 Ethernet Switch
+// Ethernet Switch
 ////////////////////////////////////////////////////////////////////////////////
 
 module eth_sw
@@ -52,6 +52,26 @@ module eth_sw
         .rd_data (fifo_rd_data[1]),
         .empty   (fifo_empty[1]),
         .full    (fifo_full[1])
+    );
+  
+    eth_rx u_eth_rx0 (
+        .clk     (clk),
+        .rstn    (rstn),
+        .i_data  (i_data[0]),
+        .i_start (i_start[0]),
+        .i_end   (i_end[0]),
+        .wr_data (fifo_wr_data[0]),
+        .wr_en   (fifo_wr_en[0])
+    );
+  
+    eth_rx u_eth_rx1 (
+        .clk     (clk),
+        .rstn    (rstn),
+        .i_data  (i_data[1]),
+        .i_start (i_start[1]),
+        .i_end   (i_end[1]),
+        .wr_data (fifo_wr_data[1]),
+        .wr_en   (fifo_wr_en[1])
     );
 
 endmodule
