@@ -15,8 +15,8 @@ module fifo
         input  logic rstn,  // reset active low
         input  logic wr_en, // write enable
         input  logic rd_en, // read enable
-        input  logic [WIDTH-1:0] data_in,  // data in
-        output logic [WIDTH-1:0] data_out, // data out
+        input  logic [WIDTH-1:0] wr_data, // write data
+        output logic [WIDTH-1:0] rd_data, // read data
         output logic empty, // empty flag
         output logic full   // full flag
     );
