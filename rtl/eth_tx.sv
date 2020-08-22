@@ -10,17 +10,18 @@ module eth_tx
     #(
       parameter [31:0] PORT_ADDR [0:1] = {0, 0}
     ) (
- 		input  logic        clk,             // clock
-      	input  logic        rstn,            // reset active low
-        input  logic [33:0] rd_data [0:1],         // port input data
-        input  logic        empty [0:1],           // queue empty flag
-      	input  logic        full [0:1],            // queue full flag
+ 		input  logic        clk,               // clock
+      	input  logic        rstn,              // reset active low
+        input  logic [33:0] rd_data     [0:1], // port input data
+        input  logic        empty       [0:1], // queue empty flag
+      	input  logic        full        [0:1], // queue full flag
         input  logic        i_port_busy [0:1], // port busy flag
-      	output logic        rd_en [0:1],           // start of input packet data
-        output logic [31:0] o_data    [0:1], // end of input packet data
-        output logic        o_start   [0:1], // write data {i_data[31:0], i_start, i_end}
-        output logic        o_end     [0:1],  // write enable
-        output logic        o_port_busy [0:1] // port busy flag
+      	output logic        rd_en       [0:1], // start of input packet data
+        output logic [31:0] o_data      [0:1], // end of input packet data
+        output logic        o_start     [0:1], // write data {i_data[31:0], i_start, i_end}
+        output logic        o_end       [0:1], // write enable
+        output logic        o_port_busy [0:1], // port busy flag
+        output logic 		port_stall  [0:1]  // port backpressure/stall signal
     );
   
     typedef enum logic [1:0] {IDLE, DEST_ADDR, TX} tx_states;
@@ -29,9 +30,9 @@ module eth_tx
   
     logic        dest_port [0:1];
   
-    logic [31:0] i_data [0:1];
+    logic [31:0] i_data  [0:1];
     logic        i_start [0:1];
-    logic        i_end [0:1];
+    logic        i_end   [0:1];
   
   	integer i;
   	
@@ -118,6 +119,14 @@ module eth_tx
                     tx_next_state[i] <= IDLE; 
                 end
             endcase
+        end
+      
+        always @(posedge clk)
+        begin
+            if (!rstn)  
+                port_stall[i] <= 0;
+          	else
+                port_stall[i] <= full[i];
         end
       
     end

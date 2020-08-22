@@ -81,17 +81,18 @@ module eth_sw
     );
   
     eth_tx u_eth_tx (
-        .clk       (clk),
-        .rstn      (rstn),
-        .rd_data   (fifo_rd_data),
-        .empty     (fifo_empty),
-        .full      (fifo_full),
+        .clk         (clk),
+        .rstn        (rstn),
+        .rd_data     (fifo_rd_data),
+        .empty       (fifo_empty),
+        .full        (fifo_full),
         .i_port_busy (port_busy),
-        .rd_en     (fifo_rd_en),
-        .o_data    (o_data),
-        .o_start   (o_start),
-        .o_end     (o_end),
-        .o_port_busy (port_busy)
+        .rd_en       (fifo_rd_en),
+        .o_data      (o_data),
+        .o_start     (o_start),
+        .o_end       (o_end),
+        .o_port_busy (port_busy),
+        .port_stall  (port_stall)
     );
   
 endmodule
