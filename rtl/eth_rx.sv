@@ -17,7 +17,7 @@ module eth_rx
       	output logic        wr_en    // write enable
     );
   
-    typedef enum logic {IDLE, RCV} rx_states;
+    typedef enum logic {IDLE, RX} rx_states;
     rx_states rx_state;
     rx_states rx_next_state;
                             
@@ -39,7 +39,7 @@ module eth_rx
                 	wr_en <= 1;	
                 end
             end
-          	RCV: begin
+          	RX: begin
                 wr_data <= {i_end, i_start, i_data};
                 wr_en <= 1;	
             end
@@ -55,15 +55,15 @@ module eth_rx
         case(rx_state)
             IDLE: begin
                 if (i_start)
-               		rx_next_state <= RCV;
+               		rx_next_state <= RX;
               	else
                   	rx_next_state <= IDLE;
             end
-          	RCV: begin
+          	RX: begin
                 if (i_end)
                     rx_next_state <= IDLE;
                 else
-                    rx_next_state <= RCV:
+                    rx_next_state <= RX;
             end
           	default: begin
              	rx_next_state <= IDLE; 
