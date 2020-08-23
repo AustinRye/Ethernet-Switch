@@ -12,16 +12,31 @@
 
 module eth_sw
 	(
-        input  logic        clk,              // clock
-        input  logic        rstn,             // reset active low
-        input  logic [31:0] i_data     [0:1], // Port input data
-        input  logic        i_start    [0:1], // Start of input packet data
-        input  logic        i_end      [0:1], // End of input packet data
-        output logic [31:0] o_data     [0:1], // Port output data
-        output logic        o_start    [0:1], // Start of output packet data
-        output logic        o_end      [0:1], // End of output packet data
-        output logic        port_stall [0:1]  // Port backpressure/stall signal
+        input  logic        clk,         // clock
+        input  logic        rstn,        // reset active low
+        input  logic [31:0] i_dataA,     // Port A input data
+        input  logic [31:0] i_dataB,     // Port B input data
+        input  logic        i_startA,    // Port A start of input packet data
+        input  logic        i_startB,    // Port B start of input packet data
+        input  logic        i_endA,      // Port A end of input packet data
+        input  logic        i_endB,      // Port B end of input packet data
+        output logic [31:0] o_dataA,     // Port A output data
+        output logic [31:0] o_dataB,     // Port B output data
+        output logic        o_startA,    // Port A start of output packet data
+        output logic        o_startB,    // Port B start of output packet data
+        output logic        o_endA,      // Port A end of output packet data
+        output logic        o_endB,      // Port B end of output packet data
+        output logic        portA_stall, // Port A backpressure/stall signal
+        output logic        portB_stall  // Port B backpressure/stall signal
     );
+  	
+    logic [31:0] i_data       [0:1]; // Port input data
+    logic        i_start      [0:1]; // Start of input packet data
+    logic        i_end        [0:1]; // End of input packet data
+    logic [31:0] o_data       [0:1]; // Port output data
+    logic        o_start      [0:1]; // Start of output packet data
+    logic        o_end        [0:1]; // End of output packet data
+    logic        port_stall   [0:1]; // Port backpressure/stall signal
   
     logic        fifo_wr_en   [0:1]; // fifo write enable
     logic        fifo_rd_en   [0:1]; // fifo read enable
@@ -31,6 +46,21 @@ module eth_sw
     logic        fifo_full    [0:1]; // fifo full flag
   
     logic        port_busy    [0:1]; // port busy flag
+  
+    assign i_data[0] = i_dataA;
+    assign i_data[1] = i_dataB;
+    assign i_start[0] = i_startA;
+    assign i_start[1] = i_startB;
+    assign i_end[0] = i_endA;
+    assign i_end[1] = i_endB;
+    assign o_dataA = o_data[0];
+    assign o_dataB = o_data[1];
+    assign o_startA = o_start[0];
+    assign o_startB = o_start[1];
+    assign o_endA = o_end[0];
+    assign o_endB = o_end[1];
+    assign portA_stall = port_stall[0];
+    assign portB_stall = port_stall[1];
 
     fifo #(
         .WIDTH (34),
