@@ -30,6 +30,19 @@ class eth_packet;
     function new();
     endfunction: new
   
+    function void post_randomize();
+        pkt_crc = compute_crc();
+        pkt_size_bytes = pkt_data.size() + 4+4+4;
+        for (int i=0; i<4; i++)
+            pkt_full.push_back(dst_addr >> i*8);
+        for (int i=0; i<4; i++)
+            pkt_full.push_back(src_addr >> i*8);
+        for (int i=0; i<pkt_data.size; i++)
+            pkt_full.push_back(pkt_data[i]);
+        for (int i=0; i<4; i++)
+            pkt_full.push_back(pkt_crc >> i*8);
+    endfunction: post_randomize
+  
     function bit [31:0] compute_crc();
 		return 'hABCDDEAD;
     endfunction: compute_crc
@@ -50,4 +63,4 @@ class eth_packet;
             return 1'b0;
     endfunction: compare_pkt
   
-endclass
+endclass: eth_packet
